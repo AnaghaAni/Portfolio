@@ -99,5 +99,44 @@ const navAs = document.querySelectorAll('.nav-links a');
 window.addEventListener('scroll', () => {
   let cur = '';
   sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) cur = s.id; });
-  navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
 });
+
+/* ─── MOBILE MENU TOGGLE ─── */
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+
+if (navToggle && navLinks) {
+  navToggle.addEventListener('click', () => {
+    const isOpen = navToggle.classList.toggle('active');
+    navLinks.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+
+  // Close menu when clicking a link
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navToggle.classList.remove('active');
+      navLinks.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  // Close menu on escape key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+      navToggle.classList.remove('active');
+      navLinks.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Ensure scroll is restored if screen resizes above mobile break point
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768 && navLinks.classList.contains('open')) {
+      navToggle.classList.remove('active');
+      navLinks.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+}
